@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 # Define methods to obtain the final database
-def merge_csv_files(source_dir, destination_dir):
+def merge_csv_files(scenario_list, source_dir, destination_dir):
     # Create a dictionary to store dataframes for each folder
     dfs = {}
 
@@ -54,7 +54,11 @@ def merge_csv_files(source_dir, destination_dir):
         merged_dfs[folder_name] = pd.concat(dfs_list, ignore_index=True)
 
     # Identify available scenarios (folders)
-    available_scenarios = [str(i) for i in range(1, 11) if str(i) in merged_dfs]
+    available_scenarios = []
+    for i in scenario_list:          # loop from 1 to 10
+        scenario_name = str(i)      # convert number to string
+        if scenario_name in merged_dfs:   # check if key exists
+            available_scenarios.append(scenario_name)
 
     # Concatenate dataframes for available scenarios into a single dataframe
     if available_scenarios:
@@ -96,7 +100,8 @@ def merge_csv_files(source_dir, destination_dir):
         print("No valid scenarios found. No file created.")
 
 # Apply the method above:
+scenario_list = list(range(1, 11))  # Example scenario list from 1 to 10
 source_directory = r'C:\Users\Tommaso\Documents\GitHub\Data-Collection\pareto_frontier_example'
 destination_directory = r'C:\Users\Tommaso\Documents\GitHub\Data-Collection\pareto_frontier_example'
 
-merge_csv_files(source_directory, destination_directory)
+merge_csv_files(scenario_list, source_directory, destination_directory)
